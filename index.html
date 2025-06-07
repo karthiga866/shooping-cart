@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Simple E-Commerce Website</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0; padding: 0; background: #f9f9f9; color: #333;
+  }
+  header {
+    background: #004e82; color: white;
+    padding: 15px 20px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  header h1 {
+    margin: 0;
+  }
+  nav button {
+    margin-left: 10px;
+    padding: 8px 12px;
+    background: white; color: #005982; border: none; border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  nav button:hover {
+    background: #ddd;
+  }
+  .cart-count {
+    background: #ff5722;
+    border-radius: 50%;
+    padding: 3px 8px;
+    color: white;
+    font-weight: bold;
+    margin-left: 5px;
+  }
+  main {
+    padding: 20px;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
+    gap: 20px;
+  }
+  .product-card {
+    background: white;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    text-align: center;
+  }
+  .product-card img {
+    max-width: 100%;
+    height: 180px;
+    object-fit: contain;
+    margin-bottom: 10px;
+  }
+  .product-card h3 {
+    margin: 10px 0 5px;
+    font-size: 1.1rem;
+  }
+  .product-card p {
+    margin: 5px 0 10px;
+    font-weight: bold;
+    color: #006482;
+  }
+  .product-card button {
+    background: #005582;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-bottom: 5px;
+  }
+  .product-card button:hover {
+    background: #3289b7;
+  }
+  .product-card a {
+    display: inline-block;
+    margin-top: 5px;
+    color: #82003b;
+    font-weight: 600;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+  #cartHistory {
+    background: white;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    max-width: 600px;
+    margin: auto;
+  }
+  #cartHistory h2 {
+    text-align: center;
+    color: #820043;
+  }
+  #cartHistory ul {
+    list-style: none;
+    padding-left: 0;
+  }
+  #cartHistory ul li {
+    padding: 8px 0;
+    border-bottom: 1px solid #ddd;
+  }
+  #offers, #contact {
+    background: white;
+    border-radius: 8px;
+    padding: 15px 20px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    max-width: 800px;
+    margin: 30px auto;
+  }
+  #offers h2, #contact h2 {
+    color: #820034;
+  }
+  #contact p {
+    line-height: 1.5;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>MyShop</h1>
+  <nav>
+    <button onclick="showSection('products')">Products</button>
+    <button onclick="showSection('cart')">Cart <span id="cartCount" class="cart-count">0</span></button>
+    <button onclick="showSection('offers')">Offers</button>
+    <button onclick="showSection('contact')">Contact</button>
+  </nav>
+</header>
+
+<main>
+  <!-- Products Section -->
+  <section id="productsSection">
+    <div class="grid" id="productGrid"></div>
+  </section>
+
+  <!-- Cart History Section -->
+  <section id="cartSection" style="display:none;">
+    <div id="cartHistory">
+      <h2>Your Cart</h2>
+      <ul id="cartList"></ul>
+      <p><em>Note: This is a demo cart, no real checkout functionality.</em></p>
+    </div>
+  </section>
+
+  <!-- Offers Section -->
+  <section id="offersSection" style="display:none;">
+    <div id="offers">
+      <h2>Current Offers</h2>
+      <ul>
+        <li>10% off on all Puma sneakers. Use code: PUMA10</li>
+        <li>Buy Redmi 13C and get a free screen protector worth ₹199</li>
+        <li>Flat ₹500 cashback on Myntra purchases above ₹3000</li>
+        <li>Festival special: Extra 5% off with ICICI credit cards</li>
+        <li>Free shipping on all orders above ₹1000</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contactSection" style="display:none;">
+    <div id="contact">
+      <h2>Contact Us</h2>
+      <p>Email:karthigakarthiga866@gmail .com</p>
+      <p>Phone: +91 8667786018</p>
+      <p>Address: 123,  Vinayaga Street, Dharmapuri, Tamil Nadu, India</p>
+      <p>Working Hours: Mon - Sat, 9 AM - 7 PM</p>
+    </div>
+  </section>
+</main>
+
+<script>
+  const products = [
+    {
+      name: "Redmi 13C 5G",
+      price: 9499,
+      image: "https://i.postimg.cc/hGfQhr0f/Screenshot-66.png",
+      link: "https://www.amazon.in/dp/B0CNX79YGX"
+    },
+    {
+      name: "Puma Smashic Sneakers",
+      price: 2199,
+      image: "https://i.postimg.cc/HnkXTgj7/Screenshot-2025-06-07-183143.png",
+      link: "https://www.flipkart.com/puma-smashic-sneakers-men/p/itm87648841321a5"
+    },
+    {
+      name: "iPhone 14 Pro Max",
+      price: 129999,
+      image: "https://i.postimg.cc/X7PfK0SL/thai-nguyen-K4ro-MA5-Bz-S0-unsplash.jpg",
+      link: "https://www.apple.com/in/iphone-14-pro/"
+    },
+    {
+      name: "Nike Air Max",
+      price: 5999,
+      image: "https://static.nike.com/a/images/t_PDP_1280_v1/f_auto,q_auto:eco/4f2739d3-7bf2-4b13-8531-0bb39f3f5f1b/air-max-plus-shoe-KsPdZQ.png",
+      link: "https://www.nike.com/in/t/air-max-plus-shoe-KsPdZQ"
+    },
+    {
+      name: "Sony WH-1000XM5 Headphones",
+      price: 29990,
+      image: "https://m.media-amazon.com/images/I/71o8Q5XJS5L._SL1500_.jpg",
+      link: "https://www.amazon.in/Sony-WH-1000XM5-Wireless-Noise-Cancelling-Headphones/dp/B09NQ7TXN6/"
+    },
+    {
+      name: "Levi's 501 Original Jeans",
+      price: 2999,
+      image: "https://lsco.scene7.com/is/image/lsco/005010114-front-pdp?fmt=webp",
+      link: "https://www.levi.com/IN/en_IN/clothing/men/jeans/501-original-fit-mens-jeans/p/005010114"
+    },
+    {
+      name: "Samsung Galaxy S23 Ultra",
+      price: 105999,
+      image: "https://i.postimg.cc/fbQBXS6D/9037537b-ce59-43d5-bb55-1ead22a6dd62.jpg",
+      link: "https://www.samsung.com/in/smartphones/galaxy-s23-ultra/"
+    },
+    {
+      name: "Adidas Ultraboost Shoes",
+      price: 13999,
+      image: "https://i.postimg.cc/ZRqWXLWT/Screenshot-67.png",
+      link: "https://www.adidas.co.in/ultraboost-22-shoes/FX6934.html"
+    },
+    {
+      name: "Canon EOS M50 Mark II",
+      price: 58995,
+      image: "https://i.postimg.cc/jjrTW6PR/Screenshot-2025-06-07-184521.png",
+      link: "https://www.canon.in/cameras/eos-m50-mark-ii/"
+    },
+    {
+      name: "OnePlus 11 5G",
+      price: 56999,
+      image: "https://i.postimg.cc/sgJt6kbZ/Screenshot-2025-06-07-184904.png",
+      link: "https://www.oneplus.com/in/11"
+    },
+    {
+      name: "Levi's 501 Original Jeans",
+      price: 2999,
+      image: "https://lsco.scene7.com/is/image/lsco/005010114-front-pdp?fmt=webp",
+      link: "https://www.levi.com/IN/en_IN/clothing/men/jeans/501-original-fit-mens-jeans/p/005010114"
+    },
+    {
+  name: "Women's Floral Maxi Dress",
+  price: 1499,
+  image: "https://i.postimg.cc/Xv3mFdkW/Screenshot-2025-06-07-190949.png",
+  link: "https://www.amazon.in/Women-Floral-Maxi-Dress/dp/B07K2S5J5K/"
+},
+{
+  name: "Ethnic Kurti for Women",
+  price: 999,
+  image: "https://i.postimg.cc/kDPGvT5w/Screenshot-2025-06-07-191320.png",
+  link: "https://www.amazon.in/Ethnic-Kurti-Women/dp/B08L9H8V8Z/"
+},
+{
+  name: "Party Wear Sequin Dress",
+  price: 1999,
+  image: "https://i.postimg.cc/cH98wpPS/Screenshot-2025-06-07-191703.png",
+  link: "https://www.amazon.in/Party-Wear-Sequin-Dress/dp/B07Y89Z1KH/"
+},
+{
+  name: "Lakmé 9to5 Primer + Matte Lipstick",
+  price: 399,
+  image: "https://i.postimg.cc/HWXTmsNq/Screenshot-2025-06-07-190112.png",
+  link: "https://www.amazon.in/Lakme-Primer-Matte-Lipstick-Rosy/dp/B0789P57Q5/"
+},
+{
+  name: "Bella Vita Organic Perfume Set (Mini)",
+  price: 349,
+  image: "https://i.postimg.cc/L6778Gbr/Screenshot-2025-06-07-190337.png",
+  link: "https://www.amazon.in/Bella-Vita-Organic-Perfume-Set/dp/B09P56JKWB/"
+},
+{
+  name: "Fastrack Black Dial Analog Watch",
+  price: 1299,
+  image: "https://i.postimg.cc/Qx9DmgGZ/Screenshot-2025-06-07-190526.png",
+  link: "https://www.amazon.in/Fastrack-Analog-Black-Dial-Watch-NL38017PL03/dp/B00TYWWU28/"
+},
+{
+  name: "Maybelline Fit Me Matte+Poreless Foundation",
+  price: 299,
+  image: "https://i.postimg.cc/bvQkt2NQ/Screenshot-2025-06-07-190659.png",
+  link: "https://www.amazon.in/Maybelline-Matte-Poreless-Foundation-30ml/dp/B08CV2NN6H/"
+},
+{
+  name: "Plum Green Tea Night Gel (Moisturizer)",
+  price: 375,
+  image: "https://i.postimg.cc/141ZftmY/Screenshot-2025-06-07-192605.png",
+  link: "https://www.amazon.in/Plum-Green-Night-Gel-Moisturizer/dp/B01CJ1KIZ6/"
+},
+{
+  name: "SUGAR Eyeliner - Black Waterproof",
+  price: 499,
+  image: "https://i.postimg.cc/s2g4ZC2V/Screenshot-2025-06-07-192707.png",
+  link: "https://www.amazon.in/SUGAR-Cosmetics-Waterproof-Black-Eyeliner/dp/B09GRKCHYF/"
+},
+
+
+    // Add more products here for demo, repeat similar format
+  ];
+
+  let cart = [];
+
+  const productGrid = document.getElementById("productGrid");
+  const cartCount = document.getElementById("cartCount");
+  const cartList = document.getElementById("cartList");
+
+  function renderProducts() {
+    productGrid.innerHTML = "";
+    products.forEach((product, i) => {
+      const card = document.createElement("div");
+      card.className = "product-card";
+      card.innerHTML = `
+        <img src="${product.image}" alt="${product.name}" />
+        <h3>${product.name}</h3>
+        <p>₹${product.price.toLocaleString()}</p>
+        <button onclick="addToCart(${i})">Add to Cart</button><br />
+        <a href="${product.link}" target="_blank" rel="noopener">Buy Now</a>
+      `;
+      productGrid.appendChild(card);
+    });
+  }
+
+  function addToCart(index) {
+    const product = products[index];
+    cart.push(product);
+    updateCartCount();
+    alert(`${product.name} added to cart!`);
+  }
+
+  function updateCartCount() {
+    cartCount.textContent = cart.length;
+  }
+
+  function renderCart() {
+    cartList.innerHTML = "";
+    if (cart.length === 0) {
+      cartList.innerHTML = "<li>Your cart is empty.</li>";
+      return;
+    }
+    cart.forEach((product, i) => {
+      const li = document.createElement("li");
+      li.textContent = `${product.name} - ₹${product.price.toLocaleString()}`;
+      cartList.appendChild(li);
+    });
+  }
+
+  function showSection(section) {
+    document.getElementById("productsSection").style.display = "none";
+    document.getElementById("cartSection").style.display = "none";
+    document.getElementById("offersSection").style.display = "none";
+    document.getElementById("contactSection").style.display = "none";
+
+    if (section === "products") {
+      document.getElementById("productsSection").style.display = "block";
+    } else if (section === "cart") {
+      document.getElementById("cartSection").style.display = "block";
+      renderCart();
+    } else if (section === "offers") {
+      document.getElementById("offersSection").style.display = "block";
+    } else if (section === "contact") {
+      document.getElementById("contactSection").style.display = "block";
+    }
+  }
+
+  window.onload = () => {
+    renderProducts();
+    showSection("products");
+  };
+</script>
+
+</body>
+</html>
